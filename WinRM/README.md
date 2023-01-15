@@ -1,4 +1,4 @@
-### Enable WinRM inschakelen
+### Enable WinRM
 
 ```cmd
 winrm quickconfig
