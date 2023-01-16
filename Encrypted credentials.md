@@ -1,12 +1,14 @@
 ### Encrypt your credentials with Export-Clixml and export to a XML-based file
 
-**Example: Script will run on SERVER01 under the user SVC_USER01. Start PowerShell => SERVER01 => Run as SVC_USER01 => Run command below**
+It is important to notice that you should run the Export-Clixml command on the server with the user that will run your script. Export-Clixml uses the combination of both the server name and username to encrypt the file. This way you can only decrypt the XML-based file on the server with the specific user.
+
+**Example: Run PowerShell as user SVC_USER01 on SERVER01.**
 
 ```powershell
 Get-Credential | Export-Clixml -Path <encrypted_credentials>.<xml/cred/sec> # Extension doesnt matter
 ```
 
-**Example: To decrypt the credentials, you must run the script on the same server under the same user.**
+**Example: To decrypt the credentials, you must run the script on the same server (SERVER01) under the same user (SVC_USER01).**
 
 ```powershell
 $Cred = Import-Clixml <encrypted_credentials>.<xml/cred/sec>
