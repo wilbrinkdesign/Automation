@@ -9,11 +9,11 @@ $HTTPSListener = Try { Get-WSManInstance winrm/config/listener -SelectorSet @{Tr
 
 If ($Cert.Thumbprint -eq $HTTPSListener.CertificateThumbprint -and !$Force)
 {
-	Write-Host "De HTTPS listener staat al ingesteld en is al voorzien van het juiste certificaat. Geen acties vereist." -ForegroundColor Green
+	Write-Host "HTTPS listener already configured with cert and activated. Nothing to do." -ForegroundColor Green
 }
 ElseIf ($HTTPSListener -and !$Force)
 {
-	Write-Host "De HTTPS listener staat al ingesteld. Geen acties vereist." -ForegroundColor Green
+	Write-Host "HTTPS listener already activated. Nothing to do." -ForegroundColor Green
 }
 Else
 {
