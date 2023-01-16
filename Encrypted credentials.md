@@ -1,6 +1,6 @@
 ### Export-Clixml
 
-Export-Clixml makes it possible to encrypt your plain text credentials in scripts. It is important to notice that you should run the Export-Clixml command on the server with the user that will run your script. Export-Clixml uses the combination of both the server name and username to encrypt the file. This way you can only decrypt the XML-based file on the server with the specific user.
+Export-Clixml makes it possible to encrypt your plain text credentials in scripts. It is important to notice that you should run the Export-Clixml command on the server with the user that will run your script. Export-Clixml uses the combination of both the server name and username to encrypt the file. This way you can only decrypt the XML-based file on the server with that specific user.
 
 **Example: Run PowerShell as user SVC_USER01 on SERVER01.**
 
