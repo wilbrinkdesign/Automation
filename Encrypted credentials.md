@@ -8,20 +8,20 @@ Encrypt plain text credentials with Export-Clixml in scripts. It is important to
 2. Your server that hosts the script is **SRV01**
 3. The user that runs the script is **SERVICEACC01**
 
-**Example: Run PowerShell as user SERVICEACC01 on SRV01**
+**Run PowerShell as user SERVICEACC01 on SRV01**
 
 ```powershell
 # In the pop-up window you want to provide the credentials of CLIENT01\Admin
 Get-Credential | Export-Clixml -Path <encrypted_credentials>.<xml/cred/sec> # Extension doesn't matter
 ```
 
-**Example: Decrypt the credentials on SRV01 with user SERVICEACC01**
+**Decrypt the credentials on SRV01 with user SERVICEACC01**
 
 ```powershell
 $Cred = Import-Clixml <encrypted_credentials>.<xml/cred/sec>
 ```
 
-**Example: Use the credentials to make a drive mapping**
+**Use the credentials to make a drive mapping**
 
 ```powershell
 New-PSDrive -Name <name> -Root <destination> -PSProvider "FileSystem" -Credential $Cred
