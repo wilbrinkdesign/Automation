@@ -12,7 +12,7 @@ Get-Credential | Export-Clixml -Path <encrypted_credentials>.<xml/cred/sec> # Ex
 $Cred = Import-Clixml <encrypted_credentials>.<xml/cred/sec>
 ```
 
-**Example: Use the credentials to make a mapping.**
+**Example: Use the credentials to make a drive mapping.**
 
 ```powershell
 New-PSDrive -Name <name> -Root <destination> -PSProvider "FileSystem" -Credential $Cred
