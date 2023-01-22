@@ -18,7 +18,7 @@ Get-Credential | Export-Clixml -Path <encrypted_credentials>.<xml/cred/sec> # Ex
 **Decrypt the credentials on SRV01 with user SERVICEACC01**
 
 ```powershell
-$Cred = Import-Clixml <encrypted_credentials>.<xml/cred/sec>
+$Cred = Import-Clixml -Path <encrypted_credentials>.<xml/cred/sec>
 ```
 
 **Use the credentials to make a drive mapping**
