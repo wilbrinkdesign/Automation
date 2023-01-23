@@ -1,52 +1,69 @@
-Param(
-	[int]$ExpireAfter = 12,
-	[switch]$Force
-)
+$global:FQDN = [System.Net.Dns]::GetHostByName($env:COMPUTERNAME).HostName
+$global:Cert = Get-ChildItem -Path Cert:\LocalMachine\My\ | Where-Object { $_.Subject -like "CN=$FQDN" -and $_.NotAfter -gt (Get-Date) } | Sort-Object NotAfter -Descending | Select-Object -First 1
+$global:HTTPSListener = Try { Get-WSManInstance winrm/config/listener -SelectorSet @{Transport='HTTPS'; Address='*'} } Catch {}
 
-$FQDN = [System.Net.Dns]::GetHostByName($env:computerName).HostName
-$Cert = Get-ChildItem -Path Cert:\LocalMachine\My\ | Where-Object { $_.Subject -like "CN=$FQDN" -and $_.NotAfter -gt (Get-Date) } | Sort-Object NotAfter -Descending | Select-Object -First 1
-$HTTPSListener = Try { Get-WSManInstance winrm/config/listener -SelectorSet @{Transport='HTTPS'; Address='*'} } Catch {}
-
-If ($Cert.Thumbprint -eq $HTTPSListener.CertificateThumbprint -and !$Force)
+Function New-SelfSignedCert
 {
-	Write-Host "HTTPS listener already configured with cert and activated. Nothing to do." -ForegroundColor Green
+	Write-Host "Create self-signed cert..." -ForegroundColor Yellow
+	$global:Cert = New-SelfSignedCertificate -CertStoreLocation Cert:\LocalMachine\My -DnsName $FQDN -NotAfter (Get-Date).AddMonths(12)
 }
-ElseIf ($HTTPSListener -and !$Force)
-{
-	Write-Host "HTTPS listener already activated. Nothing to do." -ForegroundColor Green
-}
-Else
-{
-	If ($Cert)
-	{
-		Write-Host "Valid cert found. This cert will be bind to the HTTPS listener..." -ForegroundColor Green
-	}
-	Else
-	{
-		Write-Host "No (valid) cert was found. Creating self-signed cert to bind to the HTTPS listener..." -ForegroundColor Yellow
-		$Cert = New-SelfSignedCertificate -CertStoreLocation Cert:\LocalMachine\My -DnsName $FQDN -NotAfter (Get-Date).AddMonths($ExpireAfter)
-	}
 
-	Write-Host "Enable-PSRemoting..." -ForegroundColor Yellow
-	Enable-PSRemoting -SkipNetworkProfileCheck -Force
+Function Activate-HTTPSListener
+{
+	If (!(Test-WSMan $FQDN))
+	{
+		Write-Host "Enable remote PowerShell..." -ForegroundColor Yellow
+		Enable-PSRemoting -SkipNetworkProfileCheck -Force
+	}
 
 	If (!$HTTPSListener)
 	{
-		Write-Host "Create HTTPS listener en bind new self-signed cert..." -ForegroundColor Yellow
+		Write-Host "Create new HTTPS listener and bind cert..." -ForegroundColor Yellow
 		New-WSManInstance winrm/config/listener -SelectorSet @{Transport='HTTPS'; Address='*'} -ValueSet @{Hostname=$FQDN;CertificateThumbprint=$Cert.Thumbprint} | Out-Null
 	} 
 	Else
 	{
-		Write-Host "Bind cert to existing HTTPS listener..." -ForegroundColor Yellow
+		Write-Host "Use existing HTTPS listener and bind cert..." -ForegroundColor Yellow
 		Set-WSManInstance winrm/config/listener -SelectorSet @{Transport="HTTPS"; Address="*"} -ValueSet @{Hostname=$FQDN;CertificateThumbprint=$Cert.Thumbprint} | Out-Null
 	}
 
-	Write-Host "Create firewall rule: Windows Remote Management (HTTPS-In)" -ForegroundColor Yellow
-	if (!(Get-NetFirewallRule -DisplayName "Windows Remote Management (HTTPS-In)" -ErrorAction SilentlyContinue))
+	If (!(Get-NetFirewallRule -DisplayName "Windows Remote Management (HTTPS-In)" -ErrorAction SilentlyContinue))
 	{
+		Write-Host "Creating firewall rule: Windows Remote Management (HTTPS-In)" -ForegroundColor Yellow
 		New-NetFirewallRule -DisplayName "Windows Remote Management (HTTPS-In)" -Name "Windows Remote Management (HTTPS-In)" -Profile Any -LocalPort 5986 -Protocol TCP
 	}
 
 	Write-Host "Restart WinRM..." -ForegroundColor Yellow
 	Restart-Service WinRM -Force
+}
+
+If ($Cert.Thumbprint)
+{
+	If ($HTTPSListener)
+	{
+		If ($Cert.Thumbprint -eq $HTTPSListener.CertificateThumbprint)
+		{
+			Write-Host "HTTPS listener already active and configured. Nothing to do." -ForegroundColor Green
+			Break
+		}
+		Else
+		{
+			Write-Host "HTTPS listener already active and configured, but with an other cert. Bind new cert to existing HTTPS listener..." -ForegroundColor Yellow
+			Activate-HTTPSListener
+		}
+	}
+}
+Else
+{
+	If ($HTTPSListener)
+	{
+		Write-Host "No valid cert found, but the HTTPS listener is already configured. Creating self-singed cert and bind to HTTPS listener..." -ForegroundColor Yellow
+	}
+	Else
+	{
+		Write-Host "No valid cert found and no active HTTPS listener. Creating self-singed cert and bind to HTTPS listener..." -ForegroundColor Yellow
+	}
+
+	New-SelfSignedCert
+	Activate-HTTPSListener
 }
