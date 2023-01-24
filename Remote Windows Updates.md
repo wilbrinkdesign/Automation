@@ -19,12 +19,12 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 
 		If ($OS_Versie -ge 14393)
 		{
-			Write-Host "$Computername (build: $OS_Versie) wordt nu bijgewerkt: usoclient startinstall" -ForegroundColor Green
+			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
 			usoclient startinstall
 		}
 		Else
 		{
-			Write-Host "$Computername (build: $OS_Versie) wordt nu bijgewerkt: wuauclt /detectnow /updatenow" -ForegroundColor Green
+			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
 			Import-Module PSWindowsUpdate
 			Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
 		}
