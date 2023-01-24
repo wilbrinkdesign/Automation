@@ -40,7 +40,7 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 		$Computername = $env:COMPUTERNAME
 		$OS_Versie = [System.Environment]::OSVersion.Version.Build
 
-		$AutoUpdateOption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU").AUOptions
+		$Auto_Update_Option = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU").AUOptions
 		Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Force
 		Restart-Service wuauserv
 
@@ -56,7 +56,7 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 			Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
 		}
 
-		New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Value $AutoUpdateOption -Force
+		New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Value $Auto_Update_Option -Force
 	} -AsJob
 }
 ```
