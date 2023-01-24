@@ -35,21 +35,28 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 ### If commands are not responsive, try fix and try again
 
 ```powershell
-$OS_Versie = [System.Environment]::OSVersion.Version.Build
+Import-Csv <csv_file> -Header Server | ForEach-Object {
+	Invoke-Command -ComputerName $_.Server -ScriptBlock {     
+		$Computername = $env:COMPUTERNAME
+		$OS_Versie = [System.Environment]::OSVersion.Version.Build
 
-$AutoUpdateOption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU").AUOptions
-Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Force
-Restart-Service wuauserv
+		$AutoUpdateOption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU").AUOptions
+		Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Force
+		Restart-Service wuauserv
 
-If ($OS_Versie -ge 14393)
-{
-	usoclient startscan
-	usoclient startinstall
+		If ($OS_Versie -ge 14393)
+		{
+			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
+			usoclient startinstall
+		}
+		Else
+		{
+			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
+			Import-Module PSWindowsUpdate
+			Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
+		}
+
+		New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Value $AutoUpdateOption -Force
+	} -AsJob
 }
-Else
-{
-	wuauclt /dectectnow /updatenow
-}
-
-New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Value $AutoUpdateOption -Force
 ```
