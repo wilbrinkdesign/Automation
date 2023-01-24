@@ -31,3 +31,25 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 	} -AsJob
 }
 ```
+
+### If commands are not responsive, try fix and try again
+
+```powershell
+$OS_Versie = [System.Environment]::OSVersion.Version.Build
+
+$AutoUpdateOption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU").AUOptions
+Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Force
+Restart-Service wuauserv
+
+If ($OS_Versie -ge 14393)
+{
+	usoclient startscan
+	usoclient startinstall
+}
+Else
+{
+	wuauclt /dectectnow /updatenow
+}
+
+New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Value $AutoUpdateOption -Force
+```
