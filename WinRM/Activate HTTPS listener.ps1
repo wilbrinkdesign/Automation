@@ -5,7 +5,7 @@ $global:HTTPSListener = Try { Get-WSManInstance winrm/config/listener -SelectorS
 Function New-SelfSignedCert
 {
 	Write-Host "Create self-signed cert..." -ForegroundColor Yellow
-	$global:Cert = New-SelfSignedCertificate -CertStoreLocation Cert:\LocalMachine\My -DnsName $FQDN -NotAfter (Get-Date).AddMonths(12)
+	$global:Cert = New-SelfSignedCertificate -CertStoreLocation Cert:\LocalMachine\My -DnsName $FQDN
 }
 
 Function Activate-HTTPSListener
