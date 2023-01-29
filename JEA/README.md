@@ -10,6 +10,7 @@ Restart-Service WinRM
 ```
 
 ### spooler_conf.pssc
+
 ```powershell
 @{
 # Version number of the schema used for this document
@@ -36,6 +37,7 @@ RoleDefinitions = @{ '<domain>\Spooler_Admins' = @{ RoleCapabilities = 'spooler_
 ```
 
 ### spooler_admins.psrc
+
 ```powershell
 @{
 # ID used to uniquely identify this document
@@ -59,4 +61,10 @@ VisibleFunctions = 'TabExpansion2'
 # External commands (scripts and applications) to make visible when applied to a session
 VisibleExternalCommands = 'c:\windows\system32\whoami.exe'
 }
+```
+
+### Connect to server with the specified configuration file
+
+```powershell
+Enter-PSSession <server> -ConfigurationName Spooler_Admins
 ```
