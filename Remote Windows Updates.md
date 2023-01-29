@@ -47,6 +47,7 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 		If ($OS_Versie -ge 14393)
 		{
 			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
+			usoclient startscan
 			usoclient startinstall
 		}
 		Else
