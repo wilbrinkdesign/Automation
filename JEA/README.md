@@ -12,7 +12,7 @@ New-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities'
 ```powershell
 $Roles = @{
 	'<domain>\<admin_group>'	= @{ RoleCapabilities = 'WindowsUpdateAdmin', 'WindowsUpdateUser' }
-	'<domain>\<user_group>'	= @{ RoleCapabilities = 'WindowsUpdateUser' }
+	'<domain>\<user_group>'		= @{ RoleCapabilities = 'WindowsUpdateUser' }
 }
 
 $Parameters = @{
@@ -44,11 +44,7 @@ New-PSRoleCapabilityFile @Parameters
 
 # Normal users
 $Parameters = @{
-	Path = "C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateAdmin.psrc"
-	VisibleCmdlets = "Restart-Service", @{
-		Name = "Restart-Service"
-		Parameters = @{ Name = "Service"; ValidateSet = "wuauserv" }
-	}
+	Path = "C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateUser.psrc"
 	VisibleFunctions = 'TabExpansion2'
 	VisibleExternalCommands = 'usoclient', 'wuauserv'
 }
@@ -56,7 +52,11 @@ $Parameters = @{
 New-PSRoleCapabilityFile @Parameters
 ```
 
+### Register the JEA config file
+
+```powershell
 Register-PSSessionConfiguration -Name WindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateConfig.pssc' -Force
+```
 
 ### Restart WinRM
 
@@ -69,4 +69,3 @@ Restart-Service WinRM -Force
 ```powershell
 Enter-PSSession <server> -ConfigurationName WindowsUpdate
 ```
-
