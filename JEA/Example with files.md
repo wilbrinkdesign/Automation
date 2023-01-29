@@ -10,10 +10,10 @@ New-PSSessionConfigurationFile -Path 'C:\Program Files\WindowsPowerShell\Modules
 New-PSRoleCapabilityFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdate.psrc' # What?
 
 # Register JEA role config
-Register-PSSessionConfiguration -Name WindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\JEAConfig.pssc'
+Register-PSSessionConfiguration -Name WindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\JEAConfig.pssc' -Force
 
 # Restart WinRM
-Restart-Service WinRM
+Restart-Service WinRM -Force
 
 # Connect to server with JEA config file
 Enter-PSSession <server> -ConfigurationName WindowsUpdate
