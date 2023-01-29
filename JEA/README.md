@@ -1,11 +1,20 @@
 ## Printer spooler example
 
 ```powershell
+# Create directories
 New-Item -Path 'C:\Transcripts' -ItemType Directory
 New-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities' -ItemType Directory
+
+# Create JEA file - Who?
 New-PSSessionConfigurationFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\spooler_conf.pssc'
+
+# Create JEA file - What?
 New-PSRoleCapabilityFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\spooler_admins.psrc'
+
+# Register JEA role config
 Register-PSSessionConfiguration -Name Spooler_Admins -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\spooler_conf.pssc'
+
+# Restart WinRM
 Restart-Service WinRM
 ```
 
