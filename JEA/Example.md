@@ -64,7 +64,7 @@ Register-PSSessionConfiguration -Name WindowsUpdate -Path 'C:\Program Files\Wind
 Restart-Service WinRM -Force
 ```
 
-### Connect to server with JEA config file
+### Connect to server with JEA
 
 ```powershell
 Enter-PSSession <server> -ConfigurationName WindowsUpdate
