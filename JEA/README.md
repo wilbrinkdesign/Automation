@@ -1,43 +1,43 @@
-# JEA Example: Windows Update admin capabilities
+### JEA requirements
 
 ```powershell
 # Create mandatory directories
-New-Item -Path 'C:\Transcripts' -ItemType Directory
-New-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities' -ItemType Directory
+New-Item -Path '<transcript_dir>' -ItemType Directory
+New-Item -Path '<jea_dir>' -ItemType Directory
 
 # Create the JEA config file (who gets what permissions?)
-New-PSSessionConfigurationFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateConfig.pssc'
+New-PSSessionConfigurationFile -Path '<jea_dir>\<jea_config>.pssc'
 
 # Create the JEA capability file (what can the user do on the system?)
-New-PSRoleCapabilityFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateAdmin.psrc'
+New-PSRoleCapabilityFile -Path '<jea_dir>\<jea_capability>.psrc'
 
 # Register the JEA config file
-Register-PSSessionConfiguration -Name WindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateConfig.pssc'
+Register-PSSessionConfiguration -Name <name> -Path '<jea_dir>\<jea_config>.pssc'
 
 # Restart WinRM
 Restart-Service WinRM
 
 # Connect to server with JEA config file
-Enter-PSSession <server> -ConfigurationName WindowsUpdate
+Enter-PSSession <server> -ConfigurationName <name>
 ```
 
-### Content of file: WindowsUpdateConfig.pssc
+### Content of file: <jea_config>.pssc
 
 ```powershell
 @{
 SessionType = 'RestrictedRemoteServer'
-TranscriptDirectory = 'C:\Transcripts\'
+TranscriptDirectory = '<transcript_dir>'
 RunAsVirtualAccount = $true
-RoleDefinitions = @{ '<domain>\<group>' = @{ RoleCapabilities = 'WindowsUpdateAdmin' }}
+RoleDefinitions = @{ '<domain>\<group>' = @{ RoleCapabilities = '<jea_config>' }}
 }
 ```
 
-### Content of file: WindowsUpdateAdmin.psrc
+### Content of file: <jea_capability>.psrc
 
 ```powershell
 @{
-VisibleCmdlets = @{ Name = 'Restart-Service'; Parameters = @{ Name = 'Name'; ValidateSet = 'wuauserv' } }
+VisibleCmdlets = @{ Name = 'Restart-Service'; Parameters = @{ Name = 'Name'; ValidateSet = '<service_name>' } }
 VisibleFunctions = 'TabExpansion2'
-VisibleExternalCommands = 'C:\Windows\System32\UsoClient.exe', 'C:\Windows\wuauclt.exe'
+VisibleExternalCommands = '<command_path>'
 }
 ```
