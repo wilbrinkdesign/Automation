@@ -14,6 +14,9 @@ Register-PSSessionConfiguration -Name Spooler_Admins -Path 'C:\Program Files\Win
 
 # Restart WinRM
 Restart-Service WinRM
+
+# Connect to server with JEA config file
+Enter-PSSession <server> -ConfigurationName Spooler_Admins
 ```
 
 ### spooler_conf.pssc
@@ -68,10 +71,4 @@ VisibleFunctions = 'TabExpansion2'
 # External commands (scripts and applications) to make visible when applied to a session
 VisibleExternalCommands = 'c:\windows\system32\whoami.exe'
 }
-```
-
-### Connect to server with the specified configuration file
-
-```powershell
-Enter-PSSession <server> -ConfigurationName Spooler_Admins
 ```
