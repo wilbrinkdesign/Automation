@@ -11,7 +11,8 @@ New-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities'
 
 ```powershell
 $Roles = @{
-	'<domain>\<group>'	= @{ RoleCapabilities = 'WindowsUpdateAdmin', 'WindowsUpdateClient' }
+	'<domain>\<admin_group>'	= @{ RoleCapabilities = 'WindowsUpdateAdmin', 'WindowsUpdateUser' }
+	'<domain>\<user_group>'	= @{ RoleCapabilities = 'WindowsUpdateUser' }
 }
 
 $Parameters = @{
@@ -28,6 +29,20 @@ New-PSSessionConfigurationFile @Parameters
 ### Create the JEA capability file (what can the user do on the system?)
 
 ```powershell
+# Admins
+$Parameters = @{
+	Path = "C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateAdmin.psrc"
+	VisibleCmdlets = "Restart-Service", @{
+		Name = "Restart-Service"
+		Parameters = @{ Name = "Service"; ValidateSet = "wuauserv" }
+	}
+	VisibleFunctions = 'TabExpansion2'
+	VisibleExternalCommands = 'usoclient', 'wuauserv'
+}
+
+New-PSRoleCapabilityFile @Parameters
+
+# Normal users
 $Parameters = @{
 	Path = "C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateAdmin.psrc"
 	VisibleCmdlets = "Restart-Service", @{
