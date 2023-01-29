@@ -1,4 +1,4 @@
-# JEA example how to delegate permissions to maintain Windows Update
+# JEA Example: Windows Update admin capabilities
 
 ### Create mandatory directories
 
@@ -37,7 +37,7 @@ $Parameters = @{
 		Parameters = @{ Name = "Service"; ValidateSet = "wuauserv" }
 	}
 	VisibleFunctions = 'TabExpansion2'
-	VisibleExternalCommands = 'usoclient', 'wuauserv'
+	VisibleExternalCommands = 'C:\Windows\System32\UsoClient.exe', 'C:\Windows\wuauclt.exe'
 }
 
 New-PSRoleCapabilityFile @Parameters
@@ -46,7 +46,7 @@ New-PSRoleCapabilityFile @Parameters
 $Parameters = @{
 	Path = "C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdateUser.psrc"
 	VisibleFunctions = 'TabExpansion2'
-	VisibleExternalCommands = 'usoclient', 'wuauserv'
+	VisibleExternalCommands = 'C:\Windows\System32\UsoClient.exe', 'C:\Windows\wuauclt.exe'
 }
 
 New-PSRoleCapabilityFile @Parameters
