@@ -6,20 +6,20 @@ New-Item -Path 'C:\Transcripts' -ItemType Directory
 New-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities' -ItemType Directory
 
 # Create JEA files
-New-PSSessionConfigurationFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\spooler_conf.pssc' # Who?
-New-PSRoleCapabilityFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\spooler_admins.psrc' # What?
+New-PSSessionConfigurationFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\JEAConfig.pssc' # Who?
+New-PSRoleCapabilityFile -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\WindowsUpdate.psrc' # What?
 
 # Register JEA role config
-Register-PSSessionConfiguration -Name Spooler_Admins -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\spooler_conf.pssc'
+Register-PSSessionConfiguration -Name WindowsUpdate -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities\JEAConfig.pssc'
 
 # Restart WinRM
 Restart-Service WinRM
 
 # Connect to server with JEA config file
-Enter-PSSession <server> -ConfigurationName Spooler_Admins
+Enter-PSSession <server> -ConfigurationName WindowsUpdate
 ```
 
-### spooler_conf.pssc
+### JEAConfig.pssc
 
 ```powershell
 @{
@@ -42,11 +42,11 @@ TranscriptDirectory = 'C:\Transcripts\'
 RunAsVirtualAccount = $true
 
 # User roles (security groups), and the role capabilities that should be applied to them when applied to a session
-RoleDefinitions = @{ '<domain>\Spooler_Admins' = @{ RoleCapabilities = 'spooler_admins' }}
+RoleDefinitions = @{ '<domain>\<group>' = @{ RoleCapabilities = 'WindowsUpdate' }}
 }
 ```
 
-### spooler_admins.psrc
+### WindowsUpdate.psrc
 
 ```powershell
 @{
@@ -63,12 +63,12 @@ CompanyName = 'Unknown'
 Copyright = '(c) 2023 Administrator. All rights reserved.'
 
 # Cmdlets to make visible when applied to a session
-VisibleCmdlets = @{ Name = 'Restart-Service'; Parameters = @{ Name = 'Name'; ValidateSet = 'Spooler' } }
+VisibleCmdlets = @{ Name = 'Restart-Service'; Parameters = @{ Name = 'Name'; ValidateSet = 'wuauserv' } }
 
 # Functions to make visible when applied to a session
 VisibleFunctions = 'TabExpansion2'
 
 # External commands (scripts and applications) to make visible when applied to a session
-VisibleExternalCommands = 'c:\windows\system32\whoami.exe'
+VisibleExternalCommands = 'usoclient', 'wuauserv'
 }
 ```
