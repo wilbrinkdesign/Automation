@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+  - name: Install latest Windows Updates
+    win_updates:
+      category_names: '*'
+      state: searched
+      log_path: C:\Windows\Temp\Update.log

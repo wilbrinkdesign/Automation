@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+  - name: Check Windows Firewall status
+    ansible.windows.win_powershell:
+      script: |
+        If ((Get-NetFirewallProfile -All | Where-Object { $_.Enabled -eq "False" })) { $Ansible.Changed = $True } Else { $Ansible.Changed = $False }
