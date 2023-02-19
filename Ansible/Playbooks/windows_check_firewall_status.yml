@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  gather_facts: no
   tasks:
   - name: Check Windows Firewall status
     ansible.windows.win_powershell:
