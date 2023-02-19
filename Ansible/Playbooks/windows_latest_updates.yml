@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - name: Check if Windows is up-to-date
+    ansible.windows.win_powershell:
+      script: |
+        $Updates = (Get-Hotfix).InstalledOn
+        $InstalledOn = $Updates | Get-Date -Format "yyyy-MM"
+        If ($InstalledOn -like (Get-Date -Format "yyyy-MM")) { $Ansible.Changed = $False } Else { $Ansible.Changed = $True }
