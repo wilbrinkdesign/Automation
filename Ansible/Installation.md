@@ -1,9 +1,19 @@
 ### Install Ansible on CentOS
 
+**Yum**
+
 ```bash
 yum -y update
 yum -y install epel-release
 yum -y install ansible
+```
+
+**Pip**
+
+```bash
+yum install python3 -y
+pip3 install --upgrade pip
+python3 -m pip install --user ansible
 ```
 
 ### Install Ansible dependencies on CentOS for Windows Kerberos
