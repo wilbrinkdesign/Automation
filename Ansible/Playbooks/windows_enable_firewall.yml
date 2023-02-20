@@ -7,6 +7,7 @@
       name: mpssvc
       start_mode: auto
       state: started
+
   - name: Enable all Windows Firewall profiles
     ansible.windows.win_powershell:
       script: |
