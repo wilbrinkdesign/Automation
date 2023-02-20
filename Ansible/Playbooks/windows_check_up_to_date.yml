@@ -9,4 +9,5 @@
         $InstalledUpdates = $SearchUpdates.GetTotalHistoryCount()
         $AllUpdates = $SearchUpdates.QueryHistory(0,$InstalledUpdates)
         $InstalledOn = $AllUpdates | Get-Date -Format "yyyy-MM"
+        
         If ($InstalledOn -like (Get-Date -Format "yyyy-MM")) { $Ansible.Changed = $False } Else { $Ansible.Changed = $True }
