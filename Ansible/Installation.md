@@ -3,17 +3,18 @@
 **Yum**
 
 ```bash
-yum -y update
-yum -y install epel-release
-yum -y install ansible
+yum update -y
+yum install epel-release -y
+yum install ansible -y
 ```
 
 **Pip**
 
 ```bash
+yum update -y
 yum install python3 -y
 pip3 install --upgrade pip
-python3 -m pip install --user ansible
+pip3 install ansible
 ```
 
 ### Install Ansible dependencies on CentOS for Windows Kerberos
