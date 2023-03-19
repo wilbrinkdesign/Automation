@@ -1,19 +1,18 @@
 ### Session with certificate
 
 ```powershell
-$Cred = Get-Credential
 Enter-PSSession -ComputerName "<server>" -Credential $Cred -UseSSL
 ```
 
 ### Session with certificate without check
 
 ```powershell
-$options = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
-Enter-PSSession -ComputerName "<server>" -UseSSL -Credential $Cred -SessionOption $options
+Enter-PSSession -ComputerName "<server>" -UseSSL -Credential $Cred -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck)
 ```
 
-### Session Kerberos authentication
+### Session Kerberos authentication (and with certificate)
 
 ```powershell
 Enter-PSSesion -ComputerName "<server>"
+Enter-PSSesion -ComputerName "<server>" -UseSSL
 ```
