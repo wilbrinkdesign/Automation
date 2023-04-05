@@ -1,5 +1,5 @@
 $global:FQDN = [System.Net.Dns]::GetHostByName($env:COMPUTERNAME).HostName
-$global:Cert = Get-ChildItem -Path Cert:\LocalMachine\My\ | Where-Object { $_.Subject -like "CN=$FQDN" -and $_.NotAfter -gt (Get-Date) } | Sort-Object NotAfter -Descending | Select-Object -First 1
+$global:Cert = Get-ChildItem -Path Cert:\LocalMachine\My\ | Where-Object { $_.Subject -like "CN=$FQDN*" -and $_.NotAfter -gt (Get-Date) } | Sort-Object NotAfter -Descending | Select-Object -First 1
 $global:HTTPSListener = Try { Get-WSManInstance winrm/config/listener -SelectorSet @{Transport='HTTPS'; Address='*'} } Catch {}
 
 Function New-SelfSignedCert
@@ -51,6 +51,11 @@ If ($Cert.Thumbprint)
 			Write-Host "HTTPS listener already active and configured, but with an other cert. Bind new cert to existing HTTPS listener..." -ForegroundColor Yellow
 			Activate-HTTPSListener
 		}
+	}
+	Else
+	{
+		Write-Host "HTTPS listener not configured. Bind cert to HTTPS listener..." -ForegroundColor Yellow
+		Activate-HTTPSListener
 	}
 }
 Else
