@@ -25,8 +25,7 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 		Else
 		{
 			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
-			Import-Module PSWindowsUpdate
-			Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
+			& C:\Windows\System32\wuauclt.exe /UpdateNow
 		}
 	} -AsJob
 }
@@ -53,8 +52,7 @@ Import-Csv <csv_file> -Header Server | ForEach-Object {
 		Else
 		{
 			Write-Host "$Computername (build: $OS_Versie) updating..." -ForegroundColor Green
-			Import-Module PSWindowsUpdate
-			Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
+			& C:\Windows\System32\wuauclt.exe /UpdateNow
 		}
 
 		New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUOptions" -Value $Auto_Update_Option -Force
