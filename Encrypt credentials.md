@@ -1,6 +1,6 @@
 ### Export-Clixml
 
-Encrypt plain text credentials with Export-Clixml in scripts. It is important to notice that you should run the Export-Clixml command on the server with the user that will run your script. Export-Clixml uses the combination of both the server and the users password to encrypt the XML-based file. This way you can only decrypt the file on the server with that specific user.
+Encrypt plain text credentials with Export-Clixml in scripts. It is important to notice that you should run the Export-Clixml command on the server with the user that will run your script. Export-Clixml uses the combination of both the servername and the users password to encrypt the XML-based file. This way you can only decrypt the file on the server itself with that specific user.
 
 #### Example
 
