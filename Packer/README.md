@@ -12,6 +12,18 @@
 [System.Environment]::SetEnvironmentVariable('PACKER_CACHE_DIR',$env:TEMP, 'User')
 ```
 
+#### Get latest required plugins (working directory)
+
+```powershell
+packer init .
+```
+
+#### Validate Packer config (working directory)
+
+```powershell
+packer validate .
+```
+
 #### Build with HCL (working directory)
 
 ```powershell
