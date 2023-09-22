@@ -24,7 +24,7 @@ packer init .
 packer validate .
 ```
 
-#### Build with HCL (working directory)
+#### Build VM with HCL (working directory)
 
 ```powershell
 packer build -force `
