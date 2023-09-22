@@ -9,14 +9,16 @@ vm_memory               = "2048"
 vm_disk_controller_type = "nvme"
 vm_disk_size            = "32768"
 vm_network_adapter_type = "e1000e"
+vm_dir                  = ""
+
 // Use the NAT Network
 vm_network              = "VMnet8"
 vm_hardwareversion      = "19"
 
 // Removeable media
-win_iso = "C:\\Users\\markw\\OneDrive\\Software\\SERVER_EVAL_x64FRE_en-us.iso"
-// In Powershell use the "get-filehash" command to find the checksum of the ISO
-win_iso_checksum = "3E4FA6D8507B554856FC9CA6079CC402DF11A8B79344871669F0251535255325"
+win_iso = "<iso_path>" # https://go.microsoft.com/fwlink/p/?LinkID=2195280&clcid=0x409&culture=en-us&country=US
+win_iso_checksum = "3E4FA6D8507B554856FC9CA6079CC402DF11A8B79344871669F0251535255325" # PS > Get-FileHash to find the checksum of the ISO
 
-winrm_username          = "winrm"
-winrm_password          = "Welkom1#"
+// WinRM
+winrm_username          = "<username>"
+winrm_password          = "<password>"

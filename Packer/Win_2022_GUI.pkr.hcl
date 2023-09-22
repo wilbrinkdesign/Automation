@@ -12,18 +12,16 @@ packer {
       source  = "github.com/hashicorp/vmware"
     }
   }
-
-  required_plugins {
-    windows-update = {
-      version = ">= 0.14.3"
-      source  = "github.com/rgl/windows-update"
-    }
-  }
 }
 
 variable "vm_name" {
   type        = string
   description = "Image name"
+}
+
+variable "vm_dir" {
+  type        = string
+  description = "Dir to store VM in"
 }
 
 variable "operating_system_vm" {
@@ -104,7 +102,10 @@ variable "winrm_password" {
 }
 
 source "vmware-iso" "server" {
-  vm_name = var.vm_name
+  // VM
+  vm_name           = var.vm_name
+  output_directory  = var.vm_dir
+
   // Hardware specs
   cpus                 = var.vm_cpus
   cores                = var.vm_cores
@@ -120,7 +121,7 @@ source "vmware-iso" "server" {
   version       = var.vm_hardwareversion
   iso_checksum  = var.win_iso_checksum
   iso_url       = var.win_iso
-  floppy_files  = ["../autounattend.xml"]
+  floppy_files  = ["autounattend.xml"]
   floppy_label  = "floppy"
 
   // WinRM 
@@ -136,26 +137,8 @@ source "vmware-iso" "server" {
 build {
   sources = ["source.vmware-iso.server"]
 
-  provisioner "windows-update" {
-    pause_before    = "30s"
-    search_criteria = "IsInstalled=0"
-    filters = [
-      "exclude:$_.Title -like '*Preview*'",
-      "exclude:$_.Title -like '*Defender*'",
-      "exclude:$_.InstallationBehavior.CanRequestUserInput",
-      "include:$true"
-    ]
-    restart_timeout = "120m"
-  }
-
   provisioner "windows-restart" {
     restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
     restart_timeout       = "20m"
   }
-
-  // provisioner "powershell" {
-  //   elevated_user     = var.winrm_username
-  //   elevated_password = var.winrm_password
-  //   scripts           = ["./setup/disable-autolog.ps1"]
-  // }
 }
