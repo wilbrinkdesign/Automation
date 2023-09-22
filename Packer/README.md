@@ -27,11 +27,11 @@ packer validate .
 #### Build VM with HCL (working directory)
 
 ```powershell
-packer build -force `
--var-file=".\Win_2022_GUI.auto.pkrvars.hcl" `
--var "vm_dir=$env:TEMP" `
--var "win_iso=<dir_iso>" `
--var "winrm_username=<user>" `
--var "winrm_password=<password>" `
-".\Win_2022_GUI.pkr.hcl"
+packer build -force -var-file=".\Win_2022_GUI.auto.pkrvars.hcl" -var "vm_dir=$env:TEMP" -var "win_iso=<dir_iso>" ".\Win_2022_GUI.pkr.hcl"
 ```
+
+#### Default credentials
+
+| Username      | Password    |
+| ------------- | ----------- |
+| Administrator | `P@cker`    |

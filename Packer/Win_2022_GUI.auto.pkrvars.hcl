@@ -20,5 +20,5 @@ win_iso = "<iso_path>" # https://go.microsoft.com/fwlink/p/?LinkID=2195280&clcid
 win_iso_checksum = "3E4FA6D8507B554856FC9CA6079CC402DF11A8B79344871669F0251535255325" # PS > Get-FileHash to find the checksum of the ISO
 
 // WinRM
-winrm_username          = "<username>"
-winrm_password          = "<password>"
+winrm_username          = "Administrator"
+winrm_password          = "P@cker"
