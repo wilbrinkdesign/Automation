@@ -54,12 +54,6 @@ variable "vm_hardwareversion" {
   description = "VM hardware version"
 }
 
-variable "vm_firmware" {
-  type        = string
-  description = "The virtual machine firmware. (e.g. 'efi-secure'. 'efi', or 'bios')"
-  default     = "efi-secure"
-}
-
 variable "vm_cdrom_type" {
   type        = string
   description = "The virtual machine CD-ROM type. (e.g. 'sata', or 'ide')"
@@ -115,7 +109,7 @@ source "vmware-iso" "server" {
   network_adapter_type = var.vm_network_adapter_type
   network              = var.vm_network
   cdrom_adapter_type   = "ide"
-
+  
   // Guest OS Windows 10
   guest_os_type = var.operating_system_vm
   version       = var.vm_hardwareversion
@@ -137,8 +131,11 @@ source "vmware-iso" "server" {
 build {
   sources = ["source.vmware-iso.server"]
 
-  provisioner "windows-restart" {
-    restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
-    restart_timeout       = "20m"
+  provisioner "powershell" {
+    scripts = ["Scripts/VMware_Tools.ps1"]
   }
+  
+  provisioner "powershell" {
+    scripts = ["Scripts/Updates.ps1"]
+  }  
 }

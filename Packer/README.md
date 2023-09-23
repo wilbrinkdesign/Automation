@@ -4,7 +4,7 @@
 2. Get checksum ISO: Get-FileHash <filepath_iso>
 3. Install chocolatey: https://chocolatey.org/install
 4. choco install packer
-5. VMware Workstation => Virtual Network Editor => Restore Defaults
+5. VMware Workstation 17 Pro => Virtual Network Editor => Restore Defaults
 
 #### Set packer_cache directory (optional)
 

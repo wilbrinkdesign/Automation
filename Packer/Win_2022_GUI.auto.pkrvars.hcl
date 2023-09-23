@@ -1,10 +1,9 @@
 // VM config
 vm_name                 = "GI-W10-001"
-operating_system_vm     = "windows9-64"
-vm_firmware             = "bios"
+operating_system_vm     = "windows2019srvnext-64"
 vm_cdrom_type           = "ide"
-vm_cpus                 = "2"
-vm_cores                = "1"
+vm_cpus                 = "1"
+vm_cores                = "2"
 vm_memory               = "2048"
 vm_disk_controller_type = "nvme"
 vm_disk_size            = "32768"
@@ -13,7 +12,7 @@ vm_dir                  = ""
 
 // Use the NAT Network
 vm_network              = "VMnet8"
-vm_hardwareversion      = "19"
+vm_hardwareversion      = "20"
 
 // Removeable media
 win_iso = "<iso_path>" # https://go.microsoft.com/fwlink/p/?LinkID=2195280&clcid=0x409&culture=en-us&country=US
