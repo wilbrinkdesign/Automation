@@ -135,7 +135,7 @@ build {
     scripts = ["Scripts/VMware_Tools.ps1"]
   }
   
-  provisioner "powershell" {
-    scripts = ["Scripts/Updates.ps1"]
-  }  
+  // provisioner "powershell" {
+  //   scripts = ["Scripts/Updates.ps1"]
+  // }
 }

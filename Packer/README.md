@@ -9,7 +9,7 @@
 #### Set packer_cache directory (optional)
 
 ```powershell
-[System.Environment]::SetEnvironmentVariable('PACKER_CACHE_DIR',$env:TEMP, 'User')
+[System.Environment]::SetEnvironmentVariable('PACKER_CACHE_DIR',"$env:TEMP\Packer", 'User')
 ```
 
 #### Get latest required plugins (working directory)
@@ -27,7 +27,7 @@ packer validate .
 #### Build VM with HCL (working directory)
 
 ```powershell
-packer build -force -var-file=".\Win_2022_GUI.auto.pkrvars.hcl" -var "vm_dir=$env:TEMP" -var "win_iso=<dir_iso>" ".\Win_2022_GUI.pkr.hcl"
+packer build -force -var-file=".\Win_2022_GUI.auto.pkrvars.hcl" -var "vm_dir=$env:TEMP\Packer" -var "win_iso=<dir_iso>" ".\Win_2022_GUI.pkr.hcl" # RunAs Administrator
 ```
 
 #### Default credentials
