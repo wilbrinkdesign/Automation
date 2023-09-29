@@ -1,15 +1,17 @@
-// https://www.packer.io/plugins/builders/vmware/iso
-
-// Plugins
-// Windows Update plug-in https://github.com/rgl/packer-plugin-windows-update
-// https://github.com/hashicorp/packer-plugin-vmware/releases
-
 packer {
   required_version = ">= 1.9.4"
+  
   required_plugins {
     vmware = {
       version = ">= 1.0.7"
       source  = "github.com/hashicorp/vmware"
+    }
+  }
+
+  required_plugins {
+    windows-update = {
+      version = ">= 0.14.3"
+      source  = "github.com/rgl/windows-update"
     }
   }
 }
@@ -26,7 +28,7 @@ variable "vm_dir" {
 
 variable "operating_system_vm" {
   type        = string
-  description = "OS Guest OS"
+  description = "Guest OS"
 }
 
 variable "vm_cores" {
@@ -36,7 +38,7 @@ variable "vm_cores" {
 
 variable "vm_cpus" {
   type        = string
-  description = "amount of vCPUs"
+  description = "Amount of vCPUs"
 }
 
 variable "vm_disk_controller_type" {
@@ -77,22 +79,22 @@ variable "vm_network" {
 
 variable "win_iso" {
   type        = string
-  description = "Windows 10 ISO location"
+  description = "Windows ISO location"
 }
 
 variable "win_iso_checksum" {
   type        = string
-  description = "Windows 10 ISO checksum"
+  description = "Windows ISO checksum"
 }
 
 variable "winrm_username" {
   type        = string
-  description = "winrm username"
+  description = "WinRM username"
 }
 
 variable "winrm_password" {
   type        = string
-  description = "winrm password"
+  description = "WinRM password"
 }
 
 source "vmware-iso" "server" {
@@ -110,7 +112,7 @@ source "vmware-iso" "server" {
   network              = var.vm_network
   cdrom_adapter_type   = "ide"
   
-  // Guest OS Windows 10
+  // Guest OS
   guest_os_type = var.operating_system_vm
   version       = var.vm_hardwareversion
   iso_checksum  = var.win_iso_checksum
@@ -131,11 +133,11 @@ source "vmware-iso" "server" {
 build {
   sources = ["source.vmware-iso.server"]
 
-  // provisioner "powershell" {
-  //   scripts = ["Scripts/VMware_Tools.ps1"]
-  // }
+  provisioner "powershell" {
+    scripts = ["Scripts/VMware_Tools.ps1"]
+  }
   
-  // provisioner "powershell" {
-  //   scripts = ["Scripts/Updates.ps1"]
-  // }
+  provisioner "powershell" {
+    scripts = ["Scripts/Updates.ps1"]
+  }
 }

@@ -27,7 +27,9 @@ packer validate .
 #### Build VM (working directory)
 
 ```powershell
-packer build -force -var-file=".\W2K22.auto.pkrvars.hcl" -var "vm_dir=$env:TEMP\Packer" -var "win_iso=<dir_iso>" ".\W2K22.pkr.hcl"
+packer build .
+packer build -var-file=".\W2K22.auto.pkrvars.hcl" -var "vm_dir=$env:TEMP\Packer" -var "win_iso=<dir_iso>" ".\W2K22.pkr.hcl"
+packer build -var-file=".\W2K22.auto.pkrvars.hcl" -var "vm_dir=$env:TEMP\Packer" -var "win_iso=<dir_iso>" .
 ```
 
 #### Default credentials
