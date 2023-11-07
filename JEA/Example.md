@@ -11,8 +11,8 @@ New-Item -Path 'C:\Program Files\WindowsPowerShell\Modules\JEA\RoleCapabilities'
 
 ```powershell
 $Roles = @{
-	'<domain>\<admin_group>'	= @{ RoleCapabilities = 'WindowsUpdateAdmin', 'WindowsUpdateUser' }
-	'<domain>\<user_group>'		= @{ RoleCapabilities = 'WindowsUpdateUser' }
+	'<domain>\<admin_group>' = @{ RoleCapabilities = 'WindowsUpdateAdmin' }
+	'<domain>\<user_group>' = @{ RoleCapabilities = 'WindowsUpdateUser' }
 }
 
 $Parameters = @{
