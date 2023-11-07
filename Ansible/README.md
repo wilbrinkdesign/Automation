@@ -16,7 +16,7 @@ default_realm = <DOMAIN.LOCAL>
 
 ### Configure Remoting 4 Ansible on Windows
 
-https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+[WinRM\Activate HTTPS listener.ps1](https://raw.githubusercontent.com/wilbrinkdesign/Automation/main/WinRM/Activate%20HTTPS%20listener.ps1)
 
 ### Get Kerberos ticket and use this to run Ansible Playbooks with
 
