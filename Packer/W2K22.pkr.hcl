@@ -16,90 +16,9 @@ packer {
   }
 }
 
-variable "vm_name" {
-  type        = string
-  description = "Image name"
-}
-
-variable "vm_dir" {
-  type        = string
-  description = "Dir to store VM in"
-}
-
-variable "operating_system_vm" {
-  type        = string
-  description = "Guest OS"
-}
-
-variable "vm_cores" {
-  type        = string
-  description = "Amount of cores"
-}
-
-variable "vm_cpus" {
-  type        = string
-  description = "Amount of vCPUs"
-}
-
-variable "vm_disk_controller_type" {
-  type        = string
-  description = "Controller type"
-}
-
-variable "vm_disk_size" {
-  type        = string
-  description = "Harddisk size"
-}
-
-variable "vm_hardwareversion" {
-  type        = string
-  description = "VM hardware version"
-}
-
-variable "vm_cdrom_type" {
-  type        = string
-  description = "The virtual machine CD-ROM type. (e.g. 'sata', or 'ide')"
-  default     = "sata"
-}
-
-variable "vm_memory" {
-  type        = string
-  description = "VM Memory"
-}
-
-variable "vm_network_adapter_type" {
-  type        = string
-  description = "Networkadapter type"
-}
-
-variable "vm_network" {
-  type        = string
-  description = "Network"
-}
-
-variable "win_iso" {
-  type        = string
-  description = "Windows ISO location"
-}
-
-variable "win_iso_checksum" {
-  type        = string
-  description = "Windows ISO checksum"
-}
-
-variable "winrm_username" {
-  type        = string
-  description = "WinRM username"
-}
-
-variable "winrm_password" {
-  type        = string
-  description = "WinRM password"
-}
-
 source "vmware-iso" "server" {
   // VM
-  vm_name           = var.vm_name
+  vm_name           = "${title(var.vm_name)}_${title(var.template)}_${var.vm_version}"
   output_directory  = var.vm_dir
 
   // Hardware specs
@@ -110,16 +29,19 @@ source "vmware-iso" "server" {
   disk_adapter_type    = var.vm_disk_controller_type
   network_adapter_type = var.vm_network_adapter_type
   network              = var.vm_network
-  cdrom_adapter_type   = "ide"
+  cdrom_adapter_type   = var.vm_cdrom_type
   
   // Guest OS
   guest_os_type = var.operating_system_vm
   version       = var.vm_hardwareversion
   iso_checksum  = var.win_iso_checksum
   iso_url       = var.win_iso
-  floppy_files  = ["autounattend.xml"]
-  floppy_label  = "floppy"
-
+  cd_files = ["Resources/*"]
+  cd_content = {
+    "autounattend.xml" = templatefile("Resources/Configs/unattend.pkrtpl", {password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core")})
+  }
+  cd_label = "unattend"
+  
   // WinRM 
   insecure_connection = "true"
   communicator        = "winrm"
@@ -134,10 +56,10 @@ build {
   sources = ["source.vmware-iso.server"]
 
   provisioner "powershell" {
-    scripts = ["Scripts/VMware_Tools.ps1"]
+    scripts = ["Resources/Scripts/VMware_Tools.ps1"]
   }
   
   provisioner "powershell" {
-    scripts = ["Scripts/Updates.ps1"]
+    scripts = ["Resources/Scripts/Updates.ps1"]
   }
 }
