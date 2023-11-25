@@ -38,7 +38,11 @@ source "vmware-iso" "server" {
   iso_url       = var.win_iso
   cd_files = ["Resources/*"]
   cd_content = {
-    "autounattend.xml" = templatefile("Resources/Configs/unattend.pkrtpl", {password = var.winrm_password, cdrom_drive = var.cdrom_drive, index = lookup(var.image_index, var.template, "core")})
+    "autounattend.xml" = templatefile("Resources/Configs/unattend.pkrtpl", {
+      password = var.winrm_password, 
+      cdrom_drive = var.cdrom_drive, 
+      index = lookup(var.image_index, var.template, "core")
+    })
   }
   cd_label = "unattend"
   
