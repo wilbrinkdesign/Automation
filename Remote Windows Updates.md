@@ -5,10 +5,6 @@
 <server2>
 ```
 
-### PSWindowsUpdate module is required for Server 2012 servers
-
-PowerShell module: [PSWindowsUpdates](https://www.powershellgallery.com/packages/PSWindowsUpdate)
-
 ### Script 4 remote PowerShell Windows Updates
 
 ```powershell
