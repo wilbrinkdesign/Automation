@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Check if Windows Server 2012 is installed
+      ansible.builtin.debug:
+        msg: "{{ ansible_hostname }} is a 2012 server"
+      when: ansible_distribution_major_version != '10'
+      changed_when: ansible_distribution_major_version != '10'

@@ -1,0 +1,34 @@
+---
+- hosts: all
+  gather_facts: false
+  
+  tasks:
+    - name: Check if IIS is installed
+      ansible.windows.win_service_info:
+        name: W3SVC
+      register: IIS_Installed
+
+    - name: Check if fix was already applied
+      ansible.windows.win_stat:
+        path: <script.ps1>
+      register: Fix_Installed
+
+    - name: When it is a IIS server
+      block:
+        - name: Copy script
+          ansible.windows.win_get_url:
+            url: <download_link>
+            dest: <script.ps1>
+
+        - name: Create scheduled task
+          community.windows.win_scheduled_task:
+            name: Start crashed IIS pools
+            description: When IIS pools suddenly stop, start them.
+            actions:
+              - path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+                arguments: -ExecutionPolicy Bypass -File "<script.ps1>"
+            triggers:
+              - type: event
+                subscription: "<QueryList><Query Id=\"0\" Path=\"System\"><Select Path=\"System\">*[System[Provider[@Name='Microsoft-Windows-WAS'] and EventID=5002]]</Select></Query></QueryList>"
+            username: SYSTEM
+      when: IIS_Installed.exists == True and Fix_Installed.stat.exists == False

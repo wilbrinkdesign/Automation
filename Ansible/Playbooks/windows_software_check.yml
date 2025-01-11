@@ -1,0 +1,24 @@
+- hosts: all
+  gather_facts: false
+  
+  tasks:
+    - name: Check where {{ app }} is installed
+      ansible.windows.win_powershell:
+        script: |
+          Param(
+            [string]$App
+          )
+
+          $App_x86 = Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object DisplayName -like "*$App*"
+          $App_x64 = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object DisplayName -like "*$App*"
+
+          If (!$App_x86 -and !$App_x64)
+          {
+            $Ansible.Changed = $False
+          }
+          Else
+          {
+            $Ansible.Changed = $True
+          }
+        parameters:
+          App: "{{ app }}"

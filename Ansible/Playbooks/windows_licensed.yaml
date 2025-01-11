@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Get Windows license status
+      community.windows.win_product_facts:
+      changed_when: ansible_os_license_status != "Licensed"

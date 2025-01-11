@@ -1,0 +1,19 @@
+---
+- hosts: all
+  gather_facts: false
+  
+  tasks:
+    - name: Check if software is installed
+      ansible.windows.win_service_info:
+        name: <service_name>
+      register: Software_Installed
+      changed_when: Software_Installed.exists == False
+
+    - name: If software is installed, check if service is running
+      block:
+        - name: Check if service is running
+          ansible.windows.win_service:
+            name: <service_name>
+          register: Software_Started
+          changed_when: Software_Started.state != "running"
+      when: Software_Installed.exists == True
