@@ -1,11 +1,10 @@
 ### Create VM in VMware Workstation with Packer
 
-1. Install VMware Workstation 17 Pro (Edit: VMnetx > NAT > use local DHCP service)
-2. [Download Windows Server 2022 ISO](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022)
-3. Get checksum ISO: Get-FileHash <iso>
-4. [Install chocolatey](https://chocolatey.org/install)
-5. choco install packer
-6. choco install windows-adk-oscdimg
+1. Install Nutanix AHV
+2. [Download Windows Server 2025 ISO](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025)
+3. Log into Prism Central and pload ISO
+4. winget install packer
+5. winget install windowsadk
 
 #### Set packer_cache directory (optional)
 
@@ -30,7 +29,6 @@ packer validate .
 ```powershell
 packer build .
 packer build -var "vm_dir=$env:TEMP\Packer" -var "win_iso=<dir_iso>" .
-packer build -var "vm_dir=$env:TEMP\Packer" -var "win_iso=<dir_iso>" ".\w2k22.pkr.hcl"
 ```
 
 #### Default credentials

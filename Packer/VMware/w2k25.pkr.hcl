@@ -17,11 +17,11 @@ packer {
 }
 
 source "vmware-iso" "server" {
-  // VM
-  vm_name           = "${title(var.vm_name)}_${title(var.template)}_${var.vm_version}"
-  output_directory  = var.vm_dir
+  # VM
+  vm_name          = "${title(var.vm_name)}_${title(var.template)}_${var.vm_version}"
+  output_directory = var.vm_dir
 
-  // Hardware specs
+  # Hardware specs
   cpus                 = var.vm_cpus
   cores                = var.vm_cores
   memory               = var.vm_memory
@@ -31,22 +31,22 @@ source "vmware-iso" "server" {
   network              = var.vm_network
   cdrom_adapter_type   = var.vm_cdrom_type
   
-  // Guest OS
+  # Guest OS
   guest_os_type = var.operating_system_vm
   version       = var.vm_hardwareversion
   iso_checksum  = var.win_iso_checksum
   iso_url       = var.win_iso
-  cd_files = ["Resources/*"]
-  cd_content = {
+  cd_files      = ["Resources/*"]
+  cd_content    = {
     "autounattend.xml" = templatefile("Resources/Configs/unattend.pkrtpl", {
-      password = var.winrm_password, 
-      cdrom_drive = var.cdrom_drive, 
-      index = lookup(var.image_index, var.template, "core")
+      password         = var.winrm_password, 
+      cdrom_drive      = var.cdrom_drive, 
+      index            = lookup(var.image_index, var.template, "core")
     })
   }
-  cd_label = "unattend"
+  cd_label      = "unattend"
   
-  // WinRM 
+  # WinRM 
   insecure_connection = "true"
   communicator        = "winrm"
   winrm_port          = "5985"

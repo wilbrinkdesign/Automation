@@ -19,11 +19,11 @@ variable "operating_system_vm" {
 }
 
 variable "template" {
-  type = string 
-  default = "desktop" 
-  description = "Template type, can be desktop or core"
+  type            = string 
+  default         = "desktop" 
+  description     = "Template type, can be desktop or core"
   validation {
-    condition = (var.template == "desktop") || (var.template == "core")
+    condition     = (var.template == "desktop") || (var.template == "core")
     error_message = "Should be desktop or core."
   }
 }
@@ -65,7 +65,7 @@ variable "vm_cdrom_type" {
 variable "cdrom_drive" {
   type = string
   description = "CD-ROM Driveletter for extra iso"
-  default = "E:"
+  default     = "E:"
 }
 
 variable "vm_memory" {
