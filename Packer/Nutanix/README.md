@@ -2,7 +2,7 @@
 
 1. Install Nutanix AHV
 2. [Download Windows Server 2025 ISO](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025)
-3. Log into Prism Central and pload ISO
+3. Log into Prism Central and upload ISO
 4. winget install packer
 5. winget install windowsadk
 
