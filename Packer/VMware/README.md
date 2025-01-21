@@ -3,8 +3,8 @@
 1. Install VMware Workstation 17 Pro (Edit: VMnetx > NAT > use local DHCP service)
 2. [Download Windows Server 2025 ISO](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025)
 3. Get checksum ISO: Get-FileHash <iso>
-4. winget install packer
-5. winget install windowsadk
+4. winget install Hashicorp.Packer
+5. winget install Microsoft.WindowsADK
 
 #### Set packer_cache directory (optional)
 
