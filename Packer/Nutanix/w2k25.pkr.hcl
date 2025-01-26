@@ -21,10 +21,10 @@ source "nutanix" "server" {
   nutanix_password = var.nutanix_pass
   nutanix_endpoint = var.nutanix_host
   nutanix_insecure = var.nutanix_nossl
-  cluster_uuid     = var.nutanix_cluster
+  cluster_name     = var.nutanix_cluster
 
   vm_disks {
-      image_type        = "DISK_IMAGE"
+      image_type        = "ISO_IMAGE"
       source_image_name = var.win_iso
   }
 
